@@ -20,8 +20,7 @@ public class Brick {
 
         int padding = 4;
 
-        rect = new RectF(column * width + padding, row * height + padding, column * width + width - padding, row * height
-                + height - padding);
+        rect = new RectF(column * width + padding, (row * height)+100 + padding, column * width + width - padding, (row * height)+100 + height - padding);
     }
 
     public RectF getRect(){

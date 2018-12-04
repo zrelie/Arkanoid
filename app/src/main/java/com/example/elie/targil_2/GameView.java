@@ -11,8 +11,6 @@ import android.view.View;
 
 public class GameView extends View {
 
-    private final int ROWS = 3;
-    private final int COLS = 7;
     private Paint paddlePen;
     private Paint ballPen;
     private Paint textPen;
@@ -45,5 +43,6 @@ public class GameView extends View {
         for(int i = 0; i < TheBricksCollection.getROWS(); i++)
             for(int j = 0; j < TheBricksCollection.getCOLS(); j++)
                 canvas.drawRect(TheBricksCollection.getMyBricks()[i][j].getRect(),brickPen);
+
     }
 }

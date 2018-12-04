@@ -15,6 +15,8 @@ public class GameView extends View {
     private Paint ballPen;
     private Paint textPen;
     private Paint brickPen;
+    private int Score;
+    private int Lives;
 
     private Brick b1;
     private int screenWidth = (((Activity)getContext()).getWindowManager().getDefaultDisplay()).getWidth();
@@ -28,8 +30,8 @@ public class GameView extends View {
         ballPen = new Paint();
         textPen = new Paint();
         brickPen = new Paint();
-
-
+        Score = 0;
+        Lives = 3;
     }
 
 
@@ -40,6 +42,10 @@ public class GameView extends View {
 
         canvas.drawColor(getResources().getColor(R.color.background));
         brickPen.setColor(getResources().getColor(R.color.bricksColor));
+        textPen.setColor(getResources().getColor(R.color.colorPrimary));
+        textPen.setTextSize(70);
+        canvas.drawText("Score: " +  Integer.toString(Score),0,80,textPen);
+        canvas.drawText("Lives: " +  Integer.toString(Lives),screenWidth-250,80,textPen);
         for(int i = 0; i < TheBricksCollection.getROWS(); i++)
             for(int j = 0; j < TheBricksCollection.getCOLS(); j++)
                 canvas.drawRect(TheBricksCollection.getMyBricks()[i][j].getRect(),brickPen);

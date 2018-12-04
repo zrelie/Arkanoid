@@ -16,22 +16,22 @@ public class GameView extends View {
     private Paint paddlePen;
     private Paint ballPen;
     private Paint textPen;
-
-    private int screenWidth;
-    private int screenHeight;
+    private Paint brickPen;
 
     private Brick b1;
-
+    private int screenWidth = (((Activity)getContext()).getWindowManager().getDefaultDisplay()).getWidth();
+    private int screenHeight = (((Activity)getContext()).getWindowManager().getDefaultDisplay()).getHeight();
+    private  BrickCollection TheBricksCollection;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        TheBricksCollection = new BrickCollection(context, attrs, screenWidth,screenHeight);
         paddlePen = new Paint();
         ballPen = new Paint();
         textPen = new Paint();
+        brickPen = new Paint();
 
-        screenWidth = (((Activity)getContext()).getWindowManager().getDefaultDisplay()).getWidth();
-        screenHeight = (((Activity)getContext()).getWindowManager().getDefaultDisplay()).getHeight();
+
     }
 
 
@@ -41,5 +41,9 @@ public class GameView extends View {
         super.onDraw(canvas);
 
         canvas.drawColor(getResources().getColor(R.color.background));
+        brickPen.setColor(getResources().getColor(R.color.bricksColor));
+        for(int i = 0; i < TheBricksCollection.getROWS(); i++)
+            for(int j = 0; j < TheBricksCollection.getCOLS(); j++)
+                canvas.drawRect(TheBricksCollection.getMyBricks()[i][j].getRect(),brickPen);
     }
 }

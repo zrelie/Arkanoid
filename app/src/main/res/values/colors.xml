@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#1eff00</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#1e00ff</color>
     <color name="colorAccent">#D81B60</color>
     <color name="background">#616161</color>
     <color name="bricksColor">#f90000</color>
+    <color name="ball">#ffffff</color>
 </resources>

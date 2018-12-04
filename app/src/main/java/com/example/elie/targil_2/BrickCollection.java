@@ -15,4 +15,3 @@ public class BrickCollection extends View {
 
     }
 }
-//dcdcd

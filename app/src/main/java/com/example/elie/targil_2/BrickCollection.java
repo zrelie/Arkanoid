@@ -18,7 +18,7 @@ public class BrickCollection extends View {
         MyBricks = new Brick[ROWS][COLS];
         for(int i = 0; i < ROWS; i++){
             for(int j = 0; j <COLS;j++)
-                MyBricks[i][j] = new Brick(i,j,screen_W/COLS, ((screen_H/4)/ROWS));
+                MyBricks[i][j] = new Brick(i,j,screen_W/COLS, (screen_H/4)/ROWS);
         }
 
     }

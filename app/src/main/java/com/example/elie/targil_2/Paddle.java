@@ -10,8 +10,8 @@ public class Paddle {
 
 
 
-    public Paddle(int width, int height){
-        width_in_move = (width/2);
+    public Paddle(int width, int height, int size){
+        width_in_move = size;
         rect = new RectF(width_in_move-200, height - 100, width_in_move+ 200, height - 70);
     }
 
@@ -19,4 +19,5 @@ public class Paddle {
     public RectF getRect() {
         return rect;
     }
+
 }

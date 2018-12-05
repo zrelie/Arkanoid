@@ -87,15 +87,23 @@ public class GameView extends View {
 
     }
 
-//l
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        while ((event.getAction() == MotionEvent.ACTION_DOWN) && (event.getX() > screenWidth / 2))
-                move_right();
+            switch (event.getAction()) {
 
-        while ((event.getAction() == MotionEvent.ACTION_DOWN) && (event.getX() < screenWidth / 2))
-            move_left();
+                case MotionEvent.ACTION_DOWN:
+                    if (event.getX() > screenWidth / 2)
+                        move_right();
+                    else
+                        move_left();
+                    break;
+
+                case MotionEvent.ACTION_UP:
+
+                    break;
+            }
         return true;
     }
 

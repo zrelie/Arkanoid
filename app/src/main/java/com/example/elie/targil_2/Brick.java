@@ -21,6 +21,7 @@ public class Brick {
         int padding = 4;
 
         rect = new RectF(column * width + padding, (row * height)+120 + padding, column * width + width - padding, (row * height)+120 + height - padding);
+
     }
 
     public RectF getRect(){

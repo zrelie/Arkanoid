@@ -6,10 +6,18 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 
 
 public class GameView extends View {
+
+    private final int LIVES_AT_BEGINNING = 3;
+    private final int SCORE_AT_BEGINNING = 0;
+
+    private final int GET_READY = 0;
+    private final int PLAYING = 1;
+    private final int GAME_OVER = 2;
 
     private Paint paddlePen;
     private Paint ballPen;
@@ -24,6 +32,7 @@ public class GameView extends View {
     private  BrickCollection TheBricksCollection;
     private  Paddle paddle;
     private  Ball ball;
+    private int gameStatus;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,12 +40,15 @@ public class GameView extends View {
         TheBricksCollection = new BrickCollection(context, attrs, screenWidth,screenHeight);
         paddle = new Paddle(screenWidth, screenHeight);
         ball = new Ball(screenWidth, screenHeight);
+
         paddlePen = new Paint();
         ballPen = new Paint();
         textPen = new Paint();
         brickPen = new Paint();
-        Score = 0;
-        Lives = 3;
+
+        Score = SCORE_AT_BEGINNING;
+        Lives = LIVES_AT_BEGINNING;
+        gameStatus = GET_READY;
     }
 
 
@@ -47,20 +59,35 @@ public class GameView extends View {
 
         canvas.drawColor(getResources().getColor(R.color.background));
 
-        brickPen.setColor(getResources().getColor(R.color.bricksColor));
-        textPen.setColor(getResources().getColor(R.color.colorPrimary));
-        textPen.setTextSize(70);
-        paddlePen.setColor(getResources().getColor(R.color.colorPrimaryDark));
-        ballPen.setColor(getResources().getColor(R.color.ball));
 
-        canvas.drawRoundRect(ball.getRect(),50, 50, ballPen);
-        canvas.drawRect(paddle.getRect(), paddlePen);
+        textPen.setColor(getResources().getColor(R.color.colorPrimary));
+        textPen.setTextSize(60);
         canvas.drawText("Score: " +  Integer.toString(Score),0,80,textPen);
         canvas.drawText("Lives: " +  Integer.toString(Lives),screenWidth-250,80,textPen);
+        if (gameStatus == GET_READY)
+            canvas.drawText("Click to PLAY!",(screenWidth/2)-180,(screenHeight/2)+50,textPen);
 
+
+        paddlePen.setColor(getResources().getColor(R.color.colorPrimaryDark));
+        canvas.drawRect(paddle.getRect(), paddlePen);
+
+
+        ballPen.setColor(getResources().getColor(R.color.ball));
+        canvas.drawRoundRect(ball.getRect(),50, 50, ballPen);
+
+
+        brickPen.setColor(getResources().getColor(R.color.bricksColor));
         for(int i = 0; i < TheBricksCollection.getROWS(); i++)
             for(int j = 0; j < TheBricksCollection.getCOLS(); j++)
                 canvas.drawRect(TheBricksCollection.getMyBricks()[i][j].getRect(),brickPen);
+
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+
 
     }
 }

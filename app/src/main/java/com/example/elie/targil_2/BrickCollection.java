@@ -5,16 +5,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class BrickCollection extends View {
+public class BrickCollection {
 
-    private final int ROWS = 5;
-    private final int COLS = 7;
-    private int width;
-    private int heigth;
+    private final int ROWS = 2; //5
+    private final int COLS = 1; //7
+
     private Brick[][] MyBricks;
 
-    public BrickCollection(Context context, @Nullable AttributeSet attrs, int screen_W, int screen_H) {
-        super(context, attrs);
+    public BrickCollection(int screen_W, int screen_H) {
         MyBricks = new Brick[ROWS][COLS];
         for(int i = 0; i < ROWS; i++){
             for(int j = 0; j <COLS;j++)
@@ -35,4 +33,4 @@ public class BrickCollection extends View {
         return MyBricks;
     }
 
-}//wdfwfwefwe
+}

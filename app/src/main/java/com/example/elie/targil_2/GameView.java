@@ -4,17 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.Random;
 
 
 public class GameView extends View {
 
     private final int LIVES_AT_BEGINNING = 3;
     private final int SCORE_AT_BEGINNING = 0;
+
+    private final int BALL_SPEED = 20;
 
     private enum State {GET_READY, PLAYING, GAME_OVER};
 
@@ -33,15 +39,24 @@ public class GameView extends View {
     private  Paddle paddle;
     private  Ball ball;
     private State state;
+    private int ballX;
+    private int ballY;
+    private int firstX;
+    private double firstY;
 
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        paddle_place = screenWidth/2;
         state = State.GET_READY;
+
         TheBricksCollection = new BrickCollection(context, attrs, screenWidth,screenHeight);
-        ball = new Ball(screenWidth, screenHeight);
+
+        paddle_place = screenWidth/2;
+
+        ballX = screenWidth/2;
+        ballY = screenHeight - 115;
+
 
         paddlePen = new Paint();
         ballPen = new Paint();
@@ -51,6 +66,21 @@ public class GameView extends View {
         Score = SCORE_AT_BEGINNING;
         Lives = LIVES_AT_BEGINNING;
 
+        Random rand = new Random();
+        firstX = rand.nextInt(((BALL_SPEED-1) - (-BALL_SPEED-1))+1) - (BALL_SPEED-1) ;
+        Log.e("mylog", "----------------------------------------------------");
+        Log.e("mylog", "firstX: " + firstX);
+
+        firstY = (BALL_SPEED - Math.abs(firstX));
+        Log.e("mylog", "firstY: " + firstY);
+
+        double temp = Math.abs(firstX) + Math.abs(firstY);
+        Log.e("mylog", "SPEED: " + Double.toString(temp));
+
+        //firstX *= rand.nextInt(2)-1;
+        Log.e("mylog", "firstX after: " + firstX);
+
+
     }
 
 
@@ -58,10 +88,11 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        paddle = new Paddle(screenWidth, screenHeight, paddle_place);
 
         canvas.drawColor(getResources().getColor(R.color.background));
 
+        paddle = new Paddle(screenWidth, screenHeight, paddle_place);
+        ball = new Ball(screenWidth, screenHeight, ballX, ballY);
 
         textPen.setColor(getResources().getColor(R.color.colorPrimary));
         textPen.setTextSize(60);
@@ -85,25 +116,60 @@ public class GameView extends View {
                 if(TheBricksCollection.getMyBricks()[i][j].getVisibility())
                     canvas.drawRect(TheBricksCollection.getMyBricks()[i][j].getRect(),brickPen);
 
+        if (state == State.PLAYING)
+        {
+            for (int i = 0 ; i < TheBricksCollection.getROWS() ; i++)
+                for (int j = 0 ; j < TheBricksCollection.getCOLS() ; j++)
+                    if(TheBricksCollection.getMyBricks()[i][j].getVisibility())
+                    {
+                        if (RectF.intersects(ball.getRect(), TheBricksCollection.getMyBricks()[i][j].getRect())) {
+                            firstY *= (-1);
+                            TheBricksCollection.getMyBricks()[i][j].setInvisible();
+                        }
+                    }
+
+            if (RectF.intersects(paddle.getRect(), ball.getRect()))
+            {
+                firstY  *= (-1);
+            }
+
+            if (ball.getRect().left <= 0)
+            {
+                firstX *= (-1);
+            }
+
+            if (ball.getRect().right >= screenWidth)
+            {
+                firstX *= (-1);
+            }
+
+
+            keep_going(firstX,firstY);
+        }
+        invalidate();
+
     }
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-            switch (event.getAction()) {
+        if (state == State.GET_READY)
+            state = State.PLAYING;
 
-                case MotionEvent.ACTION_DOWN:
-                    if (event.getX() > screenWidth / 2)
-                        move_right();
-                    else
-                        move_left();
-                    break;
+        switch (event.getAction()) {
 
-                case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_DOWN:
+                if (event.getX() > screenWidth / 2)
+                    move_right();
+                else
+                    move_left();
+                break;
 
-                    break;
-            }
+            case MotionEvent.ACTION_UP:
+
+                break;
+        }
         return true;
     }
 
@@ -119,12 +185,17 @@ public class GameView extends View {
 
     public void move_right(){
         if((paddle_place + MOVEMENT) + 200 < screenWidth)
-             paddle_place += MOVEMENT;
+            paddle_place += MOVEMENT;
 
         else
             paddle_place = screenWidth - 200;
 
         invalidate();
+    }
+
+    public void keep_going(int x, double y){
+        ballX += x;
+        ballY -= y;
     }
 
 }

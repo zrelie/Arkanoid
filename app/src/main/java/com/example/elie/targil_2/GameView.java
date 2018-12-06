@@ -70,9 +70,9 @@ public class GameView extends View {
 
             won = false;
             new_game = false;
+            died_bricks = 0;
         }
 
-        died_bricks = 0;
 
         paddle_place = screenWidth/2;
 
@@ -91,7 +91,7 @@ public class GameView extends View {
         Random rand = new Random();
         do {
             firstX = rand.nextInt(((BALL_SPEED) - (-BALL_SPEED)) + 1) - (BALL_SPEED);
-        } while (firstX == 0 || Math.abs(firstX) == BALL_SPEED);
+        } while (Math.abs(firstX) > BALL_SPEED-5 || Math.abs(firstX) == BALL_SPEED);
 
         firstY = (BALL_SPEED - Math.abs(firstX));
 
@@ -137,7 +137,6 @@ public class GameView extends View {
                 canvas.drawText("CONGRATULATIONS - Click to start a new game!",(screenWidth/2)-600,(screenHeight/2)+50,textPen);
             else
                 canvas.drawText("GAME OVER - Click to start a new game!",(screenWidth/2)-500,(screenHeight/2)+50,textPen);
-            new_game = true;
         }
         else if (state == State.PLAYING)
         {
@@ -250,6 +249,7 @@ public class GameView extends View {
         else if (state == State.GAME_OVER)
         {
             state = State.GET_READY;
+            new_game = true;
             init_game();
             return true;
         }

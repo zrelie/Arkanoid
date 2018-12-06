@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -21,6 +22,8 @@ public class GameView extends View {
     private final int SCORE_AT_BEGINNING = 0;
     private final int MOVEMENT = 50;
     private final int BALL_SPEED = 20;
+
+    private MediaPlayer mp;
 
     private enum State {GET_READY, PLAYING, GAME_OVER};
 
@@ -53,6 +56,8 @@ public class GameView extends View {
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mp = MediaPlayer.create(this.getContext(), R.raw.sound);
 
         new_game = true;
         state = State.GET_READY;
@@ -126,7 +131,7 @@ public class GameView extends View {
 
         textPen.setColor(getResources().getColor(R.color.colorPrimary));
         textPen.setTextSize(60);
-        canvas.drawText("Score: " +  Integer.toString(Score),0,80,textPen);
+        canvas.drawText("Score: " +  Integer.toString(Score),40,80,textPen);
         canvas.drawText("Lives: " +  Integer.toString(Lives),screenWidth-250,80,textPen);
         if (state == State.GET_READY) {
             canvas.drawText("Click to PLAY!", (screenWidth / 2) - 180, (screenHeight / 2) + 50, textPen);
@@ -149,9 +154,9 @@ public class GameView extends View {
                             TheBricksCollection.getMyBricks()[i][j].setInvisible();
                             died_bricks++;
                             Score += (Lives*5);
+                            mp.start();
                             if (died_bricks == TheBricksCollection.getCOLS()*TheBricksCollection.getROWS())
                             {
-                                Log.e("mylog", "finish");
                                 state = State.GAME_OVER;
                                 won = true;
                                 new_game = false;
@@ -262,11 +267,9 @@ public class GameView extends View {
                     new Thread() {
                         @Override
                         public void run() {
-                            // Still moving object until an ACTION_UP is done.
                             while (paddle_is_moving) {
                                 move_right();
 
-                                // Some sleep time
                                 try {
                                     Thread.sleep(50L);
                                 } catch (InterruptedException e) {
@@ -275,16 +278,13 @@ public class GameView extends View {
                             }
                         }
                     }.start();
-                    //move_right();
                 else
                     new Thread() {
                         @Override
                         public void run() {
-                            // Still moving object until an ACTION_UP is done.
                             while (paddle_is_moving) {
                                 move_left();
 
-                                // Some sleep time
                                 try {
                                     Thread.sleep(50L);
                                 } catch (InterruptedException e) {
@@ -293,7 +293,6 @@ public class GameView extends View {
                             }
                         }
                     }.start();
-                //move_left();
                 break;
 
             case MotionEvent.ACTION_MOVE:

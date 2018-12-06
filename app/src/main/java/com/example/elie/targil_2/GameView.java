@@ -150,7 +150,12 @@ public class GameView extends View {
                     if(TheBricksCollection.getMyBricks()[i][j].getVisibility())
                     {
                         if (RectF.intersects(ball.getRect(), TheBricksCollection.getMyBricks()[i][j].getRect())) {
-                            firstY *= (-1);
+                            if (ball.getRect().right == TheBricksCollection.getMyBricks()[i][j].getRect().left || ball.getRect().left == TheBricksCollection.getMyBricks()[i][j].getRect().right)
+                                firstX *= (-1);
+                            else
+                                firstY *= (-1);
+
+
                             TheBricksCollection.getMyBricks()[i][j].setInvisible();
                             died_bricks++;
                             Score += (Lives*5);

@@ -8,7 +8,7 @@ import android.view.View;
 public class BrickCollection {
 
     private final int ROWS = 5; //5
-    private final int COLS = 1; //7
+    private final int COLS = 7; //7
 
     private Brick[][] MyBricks;
 
